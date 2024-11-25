@@ -18,7 +18,11 @@ const TaskListPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [filters, setFilters] = useState<{ taskName?: string }>({});
+  const [filters, setFilters] = useState<{
+    taskName?: string;
+    priority?: string;
+  }>({});
+
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -29,7 +33,7 @@ const TaskListPage: React.FC = () => {
           10, // Tamaño de página
           undefined, // Orden
           undefined, // Filtrar por
-          undefined, // Prioridad
+          filters.priority, // Prioridad
           undefined, // Completado
           filters.taskName // Tarea por nombre
         );

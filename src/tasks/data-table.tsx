@@ -88,9 +88,7 @@ export function DataTable<TData, TValue>({
         />
         <ComboboxPriority
           value={filterValuePriority}
-          onChange={function (value: string): void {
-            throw new Error("Function not implemented.");
-          }}
+          onChange={(value) => setFilterValuePriority(value)}
         />
       </div>
 
