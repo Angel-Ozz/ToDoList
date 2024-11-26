@@ -23,12 +23,17 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ComboboxPriority } from "./priority-Combobox";
+import { CompletedCombobox } from "./status-Cbox";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pageI: Dispatch<SetStateAction<number>>;
-  onFilterChange: (filters: { taskName?: string; priority?: string }) => void;
+  onFilterChange: (filters: {
+    taskName?: string;
+    priority?: string;
+    completed?: boolean;
+  }) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,7 +45,12 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [filterValueName, setFilterValueName] = useState<string>("");
-  const [filterValuePriority, setFilterValuePriority] = useState<string>("");
+  const [filterValuePriority, setFilterValuePriority] = useState<
+    string | undefined
+  >("");
+  const [filterValueCompleted, setFilterValueCompleted] = useState<
+    boolean | undefined
+  >(undefined);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 9,
@@ -57,6 +67,9 @@ export function DataTable<TData, TValue>({
   useEffect(() => {
     onFilterChange({ priority: filterValuePriority });
   }, [filterValuePriority]);
+  useEffect(() => {
+    onFilterChange({ completed: filterValueCompleted });
+  }, [filterValueCompleted]);
 
   const table = useReactTable({
     data,
@@ -87,8 +100,20 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <ComboboxPriority
-          value={filterValuePriority}
+          value={filterValuePriority ? filterValuePriority : ""}
           onChange={(value) => setFilterValuePriority(value)}
+        />
+        <CompletedCombobox
+          value={filterValueCompleted?.toString()}
+          onChange={(value) => {
+            setFilterValueCompleted(
+              value == "true" && filterValueCompleted?.toString() != value
+                ? true
+                : value == "false" && filterValueCompleted?.toString() != value
+                ? false
+                : undefined
+            );
+          }}
         />
       </div>
 

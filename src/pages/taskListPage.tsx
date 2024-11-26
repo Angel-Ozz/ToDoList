@@ -21,6 +21,7 @@ const TaskListPage: React.FC = () => {
   const [filters, setFilters] = useState<{
     taskName?: string;
     priority?: string;
+    completed?: boolean;
   }>({});
 
   const [page, setPage] = useState(0);
@@ -34,7 +35,7 @@ const TaskListPage: React.FC = () => {
           undefined, // Orden
           undefined, // Filtrar por
           filters.priority, // Prioridad
-          undefined, // Completado
+          filters.completed, // Completado
           filters.taskName // Tarea por nombre
         );
         setTasks(data);

@@ -17,14 +17,19 @@ import {
 import { Input } from "../components/ui/input";
 import { DatePickerDemo } from "./date-picker";
 import { ComboboxDemo } from "./priority-selecter";
-import { updateTask } from "../services/taskService";
+import { deleteTask, updateTask } from "../services/taskService";
 import { Task } from "../types/Task";
 
 const FormSchema = z.object({
   taskName: z.string().min(2, {
     message: "Task name must be between 2 and 120 characters",
   }),
-  dueDate: z.date().optional(),
+  dueDate: z
+    .date()
+    .optional()
+    .refine((date) => !date || date >= new Date(), {
+      message: "Due date cant be past today",
+    }),
   priority: z.string().min(1, {
     message: "Select a priority",
   }),
@@ -69,6 +74,18 @@ export function UpdateForm({ onClose, row }: UpdateFormProps) {
 
     onClose();
     form.reset();
+  }
+
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
+
+    if (confirmed) {
+      await deleteTask(row.id);
+
+      onClose();
+    }
   }
 
   return (
@@ -131,7 +148,10 @@ export function UpdateForm({ onClose, row }: UpdateFormProps) {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Edit</Button>
+        <Button type="button" className="ml-40 mr-0" onClick={handleDelete}>
+          Delete
+        </Button>
       </form>
     </Form>
   );

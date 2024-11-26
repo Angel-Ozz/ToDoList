@@ -22,7 +22,12 @@ const FormSchema = z.object({
   taskName: z.string().min(2, {
     message: "Task name must be between 2 and 120 characters",
   }),
-  dueDate: z.date().optional(),
+  dueDate: z
+    .date()
+    .optional()
+    .refine((date) => !date || date >= new Date(), {
+      message: "Due date cant be past today",
+    }),
   priority: z.string().min(1, {
     message: "Select a priority",
   }),

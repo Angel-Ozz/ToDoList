@@ -49,8 +49,12 @@ export const DatePickerDemo = React.forwardRef<
                 date.getMonth(),
                 date.getDate()
               );
-              console.log("Normalized Date:", normalizedDate);
-              onChange(normalizedDate);
+
+              if (value && normalizedDate.getTime() === value.getTime()) {
+                onChange(undefined);
+              } else {
+                onChange(normalizedDate);
+              }
             } else {
               onChange(undefined);
             }

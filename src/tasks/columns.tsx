@@ -22,15 +22,16 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       useEffect(() => {
         row.toggleSelected(row.getValue("completed"));
-      }, []);
+      }, [row]);
 
       const handleChange = async (value: boolean) => {
         try {
+          let rowId = row.original.id;
           row.toggleSelected(!!value);
           if (value) {
-            await markTaskAsDone(parseInt(row.id));
+            await markTaskAsDone(rowId);
           } else {
-            await markTaskAsUnDone(parseInt(row.id));
+            await markTaskAsUnDone(rowId);
           }
         } catch (error) {
           console.error("Error handling checkbox change:", error);
@@ -106,7 +107,7 @@ export const columns: ColumnDef<Task>[] = [
       }, [row.getIsSelected()]);
       let doneDate: Date | null = row.getValue("doneDate");
 
-      if (doneDate === null && completed) {
+      if ((doneDate === null || doneDate == undefined) && completed) {
         doneDate = new Date();
       }
 
