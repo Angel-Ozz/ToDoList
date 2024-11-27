@@ -60,7 +60,6 @@ export function InputForm({ onClose }: { onClose: () => void }) {
     };
 
     await createTask(jsonObject);
-    console.log(jsonObject);
 
     toast({
       title: "You submitted the following values:",

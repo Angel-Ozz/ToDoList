@@ -38,17 +38,17 @@ const TaskListPage: React.FC = () => {
   }>({});
 
   const [page, setPage] = useState(0);
-  const [sortBy, setSortBy] = useState<string | undefined>(undefined);
+  const [sortBy, setSortBy] = useState<string[]>([]);
 
   useEffect(() => {
     const loadTasks = async () => {
       try {
         const data = await fetchTasks(
           page,
-          sortBy, // Orden (sortBy)
-          filters.taskName, // Tarea por nombre
-          filters.priority, // Prioridad
-          filters.completed // Estado completado
+          sortBy,
+          filters.taskName,
+          filters.priority,
+          filters.completed
         );
         setTasks(data);
       } catch (err) {

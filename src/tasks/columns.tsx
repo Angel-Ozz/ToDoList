@@ -17,8 +17,8 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "../components/ui/button";
 
 export const columns = (
-  setSortBy: (sort: string | undefined) => void,
-  sortBy: string | undefined
+  setSortBy: (sort: string[]) => void,
+  sortBy: string[]
 ): ColumnDef<Task>[] => [
   {
     id: "select",
@@ -75,10 +75,10 @@ export const columns = (
             className="m-0 p-0 text-xl font-medium "
             variant="ghost"
             onClick={() => {
-              if (sortBy === "priority") {
-                setSortBy(undefined);
+              if (sortBy.includes("priority")) {
+                setSortBy(sortBy.filter((item) => item !== "priority"));
               } else {
-                setSortBy("priority");
+                setSortBy([...sortBy, "priority"]);
               }
             }}
           >
@@ -108,7 +108,26 @@ export const columns = (
   },
   {
     accessorKey: "taskDueDate",
-    header: "Due Date",
+    header: ({}) => {
+      return (
+        <div className="text-left">
+          <Button
+            className="m-0 p-0 text-xl font-medium "
+            variant="ghost"
+            onClick={() => {
+              if (sortBy.includes("taskDueDate")) {
+                setSortBy(sortBy.filter((item) => item !== "taskDueDate"));
+              } else {
+                setSortBy([...sortBy, "taskDueDate"]); //why 3 dots, react states immutable, so we need to copy the array and append the thing to then set it as the state again
+              }
+            }}
+          >
+            Due Date
+            <ArrowUpDown />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       const dueDate: string | null = row.getValue("taskDueDate");
 

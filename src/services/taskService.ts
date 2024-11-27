@@ -6,14 +6,20 @@ const API_BASE_URL = "http://localhost:9090/todos";
 // Fetch all tasks with optional filtering, sorting, and pagination
 export const fetchTasks = async (
   page: number,
-  sortBy?: string,
+  sortBy?: string | string[],
   taskName?: string,
   priority?: string,
   completed?: boolean
 ): Promise<Task[]> => {
   const params = new URLSearchParams();
   params.append("page", page.toString());
-  if (sortBy) params.append("sortBy", sortBy);
+  if (sortBy) {
+    if (Array.isArray(sortBy)) {
+      sortBy.forEach((sort) => params.append("sortBy", sort));
+    } else {
+      params.append("sortBy", sortBy);
+    }
+  }
   if (taskName) params.append("taskName", taskName);
   if (priority) params.append("priority", priority);
   if (completed !== undefined) params.append("completed", completed.toString());
@@ -64,7 +70,7 @@ export const fetchTaskById = async (id: number): Promise<Task> => {
     return response.data;
   } catch (error) {
     console.error(`Error fetching task with ID ${id}:`, error);
-    throw error; // Re-lanza el error para que sea manejado más arriba
+    throw error;
   }
 };
 
