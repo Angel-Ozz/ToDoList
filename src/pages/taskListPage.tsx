@@ -81,7 +81,7 @@ const TaskListPage: React.FC = () => {
       };
 
       loadAverageTime();
-    }, []);
+    }, [averageTime, tasks]);
 
     if (error) {
       return <p>{error}</p>;
@@ -112,7 +112,7 @@ const TaskListPage: React.FC = () => {
       };
 
       loadAverageTimes();
-    }, []);
+    }, [averageTimes, tasks]);
 
     if (error) {
       return <p>{error}</p>;
