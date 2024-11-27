@@ -27,9 +27,17 @@ const FormSchema = z.object({
   dueDate: z
     .date()
     .optional()
-    .refine((date) => !date || date >= new Date(), {
-      message: "Due date cant be past today",
-    }),
+    .refine(
+      (date) => {
+        if (!date) return true;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date >= today;
+      },
+      {
+        message: "Due date can't be in the past",
+      }
+    ),
   priority: z.string().min(1, {
     message: "Select a priority",
   }),
