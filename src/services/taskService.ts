@@ -6,7 +6,6 @@ const API_BASE_URL = "http://localhost:9090/todos";
 // Fetch all tasks with optional filtering, sorting, and pagination
 export const fetchTasks = async (
   page: number,
-  size: number = 10,
   sortBy?: string,
   taskName?: string,
   priority?: string,
@@ -14,7 +13,6 @@ export const fetchTasks = async (
 ): Promise<Task[]> => {
   const params = new URLSearchParams();
   params.append("page", page.toString());
-  params.append("size", size.toString());
   if (sortBy) params.append("sortBy", sortBy);
   if (taskName) params.append("taskName", taskName);
   if (priority) params.append("priority", priority);
@@ -35,10 +33,10 @@ export const fetchTasks = async (
 export const fetchAverageCompletionTime = async (): Promise<number> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/avg-done-time`);
-    return response.data; // Supone que el backend devuelve un número directamente
+    return response.data;
   } catch (error) {
     console.error("Error fetching average completion time:", error);
-    throw error; // Lanza el error para manejarlo más arriba si es necesario
+    throw error;
   }
 };
 

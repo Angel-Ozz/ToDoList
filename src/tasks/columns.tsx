@@ -16,7 +16,10 @@ import { UpdateForm } from "./update";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "../components/ui/button";
 
-export const columns: ColumnDef<Task>[] = [
+export const columns = (
+  setSortBy: (sort: string | undefined) => void,
+  sortBy: string | undefined
+): ColumnDef<Task>[] => [
   {
     id: "select",
     accessorKey: "id",
@@ -65,13 +68,19 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "taskPriority",
-    header: ({ column }) => {
+    header: ({}) => {
       return (
         <div className="text-left">
           <Button
             className="m-0 p-0 text-xl font-medium "
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => {
+              if (sortBy === "priority") {
+                setSortBy(undefined);
+              } else {
+                setSortBy("priority");
+              }
+            }}
           >
             Priority
             <ArrowUpDown />

@@ -38,14 +38,14 @@ const TaskListPage: React.FC = () => {
   }>({});
 
   const [page, setPage] = useState(0);
+  const [sortBy, setSortBy] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const loadTasks = async () => {
       try {
         const data = await fetchTasks(
           page,
-          10, // Tamaño de página
-          undefined, // Orden (sortBy)
+          sortBy, // Orden (sortBy)
           filters.taskName, // Tarea por nombre
           filters.priority, // Prioridad
           filters.completed // Estado completado
@@ -58,7 +58,7 @@ const TaskListPage: React.FC = () => {
     };
 
     loadTasks();
-  }, [isDialogOpen, page, filters]);
+  }, [isDialogOpen, page, filters, sortBy]);
 
   const closeDialog = () => setDialogOpen(false);
 
@@ -91,18 +91,20 @@ const TaskListPage: React.FC = () => {
   };
 
   const AverageCompletionTimePerPriority = () => {
-    const [averageTimes, setAverageTimes] = useState<{
-      HIGH: number;
-      MEDIUM: number;
-      LOW: number;
-    } | null>(null);
+    const [averageTimes, setAverageTimes] = useState<
+      | {
+          HIGH: number;
+          MEDIUM: number;
+          LOW: number;
+        }
+      | {}
+    >({});
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
       const loadAverageTimes = async () => {
         try {
           const data = await fetchAverageCompletionTimePriority();
-          console.log(data);
           setAverageTimes(data);
         } catch (err) {
           setError("Error fetching average completion times by priority");
@@ -116,8 +118,8 @@ const TaskListPage: React.FC = () => {
       return <p>{error}</p>;
     }
 
-    if (!averageTimes) {
-      return <p>Loading...</p>;
+    if (Object.keys(averageTimes).length === 0) {
+      return <p>0 minutes</p>;
     }
 
     return (
@@ -151,7 +153,7 @@ const TaskListPage: React.FC = () => {
         </Dialog>
 
         <DataTable
-          columns={columns}
+          columns={columns(setSortBy, sortBy)}
           data={tasks}
           pageI={setPage}
           onFilterChange={setFilters}
