@@ -61,15 +61,12 @@ export function DataTable<TData, TValue>({
   }, [pagination]);
 
   useEffect(() => {
-    onFilterChange({ taskName: filterValueName });
-  }, [filterValueName]);
-
-  useEffect(() => {
-    onFilterChange({ priority: filterValuePriority });
-  }, [filterValuePriority]);
-  useEffect(() => {
-    onFilterChange({ completed: filterValueCompleted });
-  }, [filterValueCompleted]);
+    onFilterChange({
+      taskName: filterValueName,
+      priority: filterValuePriority,
+      completed: filterValueCompleted,
+    });
+  }, [filterValueName, filterValuePriority, filterValueCompleted]);
 
   const table = useReactTable({
     data,

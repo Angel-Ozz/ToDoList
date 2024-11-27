@@ -32,11 +32,11 @@ const TaskListPage: React.FC = () => {
       try {
         const data = await fetchTasks(
           page,
-          10, // page
-          undefined, // Order (sortBy)
-          filters.taskName, //name
-          filters.priority, // Prio
-          filters.completed // state
+          10, // Tamaño de página
+          undefined, // Orden (sortBy)
+          filters.taskName, // Tarea por nombre
+          filters.priority, // Prioridad
+          filters.completed // Estado completado
         );
         setTasks(data);
       } catch (err) {
@@ -46,7 +46,7 @@ const TaskListPage: React.FC = () => {
     };
 
     loadTasks();
-  }, [isDialogOpen, page, filters]);
+  }, [isDialogOpen, page, filters]); // Dependencias
 
   const closeDialog = () => setDialogOpen(false);
 

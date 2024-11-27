@@ -20,6 +20,8 @@ export const fetchTasks = async (
   if (priority) params.append("priority", priority);
   if (completed !== undefined) params.append("completed", completed.toString());
 
+  //console.log(`Fetching tasks with URL: ${API_BASE_URL}?${params.toString()}`);
+
   try {
     const response = await axios.get(`${API_BASE_URL}?${params.toString()}`);
     return response.data;
@@ -29,25 +31,55 @@ export const fetchTasks = async (
   }
 };
 
+export const fetchAverageCompletionTime = async (): Promise<number> => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/avg-done-time`);
+    return response.data; // Supone que el backend devuelve un número directamente
+  } catch (error) {
+    console.error("Error fetching average completion time:", error);
+    throw error; // Lanza el error para manejarlo más arriba si es necesario
+  }
+};
+
 // Fetch a single task by ID
 export const fetchTaskById = async (id: number): Promise<Task> => {
-  const response = await axios.get(`${API_BASE_URL}/${id}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching task with ID ${id}:`, error);
+    throw error; // Re-lanza el error para que sea manejado más arriba
+  }
 };
 
 // Create a new task
 export const createTask = async (task: Partial<Task>): Promise<void> => {
-  await axios.post(API_BASE_URL, task);
+  try {
+    await axios.post(API_BASE_URL, task);
+  } catch (error) {
+    console.error("Error creating task:", error);
+    throw error;
+  }
 };
 
 // Mark a task as done
 export const markTaskAsDone = async (id: number): Promise<void> => {
-  await axios.patch(`${API_BASE_URL}/${id}/done`);
+  try {
+    await axios.patch(`${API_BASE_URL}/${id}/done`);
+  } catch (error) {
+    console.error(`Error marking task with ID ${id} as done:`, error);
+    throw error;
+  }
 };
 
 // Mark a task as undone
 export const markTaskAsUnDone = async (id: number): Promise<void> => {
-  await axios.patch(`${API_BASE_URL}/${id}/undone`);
+  try {
+    await axios.patch(`${API_BASE_URL}/${id}/undone`);
+  } catch (error) {
+    console.error(`Error marking task with ID ${id} as undone:`, error);
+    throw error;
+  }
 };
 
 // Partially update a task
@@ -55,10 +87,20 @@ export const updateTask = async (
   id: number,
   updates: Partial<Task>
 ): Promise<void> => {
-  await axios.patch(`${API_BASE_URL}/${id}`, updates);
+  try {
+    await axios.patch(`${API_BASE_URL}/${id}`, updates);
+  } catch (error) {
+    console.error(`Error updating task with ID ${id}:`, error);
+    throw error;
+  }
 };
 
 // Delete a task
 export const deleteTask = async (id: number): Promise<void> => {
-  await axios.delete(`${API_BASE_URL}/${id}`);
+  try {
+    await axios.delete(`${API_BASE_URL}/${id}`);
+  } catch (error) {
+    console.error(`Error deleting task with ID ${id}:`, error);
+    throw error;
+  }
 };
