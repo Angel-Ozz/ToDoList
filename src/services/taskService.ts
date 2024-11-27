@@ -31,6 +31,7 @@ export const fetchTasks = async (
   }
 };
 
+//Get avg time 4 all
 export const fetchAverageCompletionTime = async (): Promise<number> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/avg-done-time`);
@@ -38,6 +39,23 @@ export const fetchAverageCompletionTime = async (): Promise<number> => {
   } catch (error) {
     console.error("Error fetching average completion time:", error);
     throw error; // Lanza el error para manejarlo más arriba si es necesario
+  }
+};
+
+//Get avg time per priority
+export const fetchAverageCompletionTimePriority = async (): Promise<{
+  HIGH: number;
+  MEDIUM: number;
+  LOW: number;
+}> => {
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/avg-done-time-priorities`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching average completion time:", error);
+    throw error;
   }
 };
 
