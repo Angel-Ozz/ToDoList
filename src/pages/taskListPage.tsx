@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../components/ui/dialog";
+import { Label } from "@radix-ui/react-label";
 
 const TaskListPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -31,12 +32,11 @@ const TaskListPage: React.FC = () => {
       try {
         const data = await fetchTasks(
           page,
-          10, // Tamaño de página
-          undefined, // Orden
-          undefined, // Filtrar por
-          filters.priority, // Prioridad
-          filters.completed, // Completado
-          filters.taskName // Tarea por nombre
+          10, // page
+          undefined, // Order (sortBy)
+          filters.taskName, //name
+          filters.priority, // Prio
+          filters.completed // state
         );
         setTasks(data);
       } catch (err) {
@@ -47,6 +47,7 @@ const TaskListPage: React.FC = () => {
 
     loadTasks();
   }, [isDialogOpen, page, filters]);
+
   const closeDialog = () => setDialogOpen(false);
 
   if (error) {
@@ -77,6 +78,7 @@ const TaskListPage: React.FC = () => {
         pageI={setPage}
         onFilterChange={setFilters}
       />
+      <Label className="flex justify-center items-center">{page}</Label>
     </div>
   );
 };

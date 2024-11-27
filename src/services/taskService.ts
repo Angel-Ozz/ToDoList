@@ -8,23 +8,25 @@ export const fetchTasks = async (
   page: number,
   size: number = 10,
   sortBy?: string,
-  filterBy?: string,
+  taskName?: string,
   priority?: string,
-  completed?: boolean,
-  taskName?: string
+  completed?: boolean
 ): Promise<Task[]> => {
-  const params = new URLSearchParams({
-    page: page.toString(),
-    size: size.toString(),
-    ...(sortBy && { sortBy }),
-    ...(filterBy && { filterBy }),
-    ...(priority && { priority }),
-    ...(completed !== undefined && { completed: completed.toString() }),
-    ...(taskName && { taskName }),
-  });
+  const params = new URLSearchParams();
+  params.append("page", page.toString());
+  params.append("size", size.toString());
+  if (sortBy) params.append("sortBy", sortBy);
+  if (taskName) params.append("taskName", taskName);
+  if (priority) params.append("priority", priority);
+  if (completed !== undefined) params.append("completed", completed.toString());
 
-  const response = await axios.get(`${API_BASE_URL}?${params.toString()}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_BASE_URL}?${params.toString()}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    throw error;
+  }
 };
 
 // Fetch a single task by ID
