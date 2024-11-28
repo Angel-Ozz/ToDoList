@@ -1,5 +1,7 @@
 # React + TypeScript + Vite
 
+#TO RUN THIS JUST INSTALL NODE JS AND AFTER CLONING THE REPO WRITE rm -rf node_modules package-lock.json and npm install
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
